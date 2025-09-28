@@ -1,0 +1,23 @@
+@font-face {
+    font-family: DINPro;
+    font-style: normal;
+    font-weight: 300;
+    font-display: fallback;
+    src: url('https://www.protegrity.com/wp-content/themes/protegrity/assets/fonts/dinpro/DINPro-Light.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: DINPro;
+    font-style: normal;
+    font-weight: 400;
+    font-display: fallback;
+    src: url('https://www.protegrity.com/wp-content/themes/protegrity/assets/fonts/dinpro/DINPro.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: DINPro;
+    font-style: normal;
+    font-weight: 700;
+    font-display: fallback;
+    src: url('https://www.protegrity.com/wp-content/themes/protegrity/assets/fonts/dinpro/DINPro-Bold.woff2') format('woff2');
+}
