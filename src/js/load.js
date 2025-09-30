@@ -1,9 +1,13 @@
 import { fetchRedditPosts, dividePostsIntoBlocks } from "./modules/posts.js";
-import { truncateText, nextPage, previousPage, goToPage } from "./modules/utilities.js";
+import { nextPage, previousPage, goToPage } from "./modules/utilities.js";
+import { default as UserPost } from "./modules/userPost.js";
 
-const { createApp, ref, computed, onBeforeMount } = Vue; // From global object
+const { createApp, ref, computed, onBeforeMount } = globalThis.Vue;
 
 createApp({
+    components: {
+        UserPost
+    },
     setup() {
         const date = ref(new Date().getFullYear());
         const posts = ref([]);
@@ -14,9 +18,14 @@ createApp({
         const postType = ref("hot");
         const postLimit = ref(36); // Total number of posts to fetch
         const loading = ref(true); // Display loading indicator
+        const audioPlayerInUse = ref("");
         const redditUrl = computed(() => 
             `/reddit?sub=${subReddit.value}&type=${postType.value}&limit=${postLimit.value}`
         );
+
+        const resetAudioPlayers = playerId => {
+            audioPlayerInUse.value = playerId;
+        }
 
         const changePostType = async type => {
             if (postTypeOptions.value.includes(type)) {
@@ -51,11 +60,12 @@ createApp({
             posts,
             currentPage,
             totalPages,
+            audioPlayerInUse,
             nextPage,
             previousPage,
             goToPage,
-            truncateText,
-            changePostType
+            changePostType,
+            resetAudioPlayers
         };
     }
 }).mount("#redditApp")

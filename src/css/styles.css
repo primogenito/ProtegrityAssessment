@@ -165,7 +165,74 @@ a {
     }
 }
 
+.post-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-audio-player {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--off-black);
+    background: none;
+
+    li {
+        margin: 0;
+        padding: 0 0.25rem 0.25rem;
+        border: 1px solid var(--off-black);
+        border-top: 0;
+
+        &:first-of-type {
+            border-bottom-left-radius: 1rem;
+        }
+
+        &:last-of-type {
+            border-bottom-right-radius: 1rem;
+        }
+    }
+
+    .post-audio-button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.25rem 1rem;
+        width: 5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: var(--off-black);
+        background: var(--white);
+        border: 0;
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        &:not(:disabled):active,
+        &.player-in-use {
+            color: var(--orange);
+
+            .audio-outline-icon {
+                color: var(--orange);
+                transform: scale(1.1);
+            }
+        }
+
+        .audio-outline-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: #555;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+    }
+}
+
 .post {
+    flex: 2;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -174,6 +241,8 @@ a {
     padding: 2rem 1.75rem;
     background-color: var(--white-1);
     border-radius: 1rem;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
     overflow: hidden;
 
     .post-title-wrapper {
@@ -223,6 +292,8 @@ a {
         left: 0;
         display: block;
         border-radius: 1rem;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
 
         &:hover,
         &:focus,
