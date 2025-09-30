@@ -39,30 +39,14 @@
                         v-for:="(block, index) in posts" 
                         v-bind:data-page-block="index"
                     >        
-                        <template v-for:="post in block" :key="post.id">                   
-                            <article class="post" v-show:="index === currentPage">
-                                <a rel="permalink" v-bind:href="post.url" target="_blank" class="post-link">
-                                    <span class="visibility-hidden">Read full post "{{ post.title }}"</span>
-                                </a>
-                                <header class="post-title-wrapper">
-                                    <h2 class="post-title">{{ truncateText(post.title.toLowerCase(), 52) }}</h2>
-                                    <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        viewBox="0 0 48 48" 
-                                        fill="none"
-                                        width="48" 
-                                        height="48"
-                                        class="post-nav-button" 
-                                    >
-                                        <rect x="0.5" y="0.5" width="47" height="47" rx="23.5" stroke="#373737"></rect>
-                                        <path d="M21.7148 30.8574L28.572 24.0003L21.7148 17.1431" stroke="#373737" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </header>
-                                
-                                <h3 class="post-author post-meta">By {{ post.author_fullname }}</h3>
-                                <p class="post-content">{{ truncateText(post.selftext) }}</p>
-                                <p class="post-comment-count post-meta">{{ post.num_comments }} comments</p>
-                            </article>
+                        <template v-for:="post in block" :key="post.id">
+                            <user-post 
+                                v-show:="index === currentPage"
+                                v-bind:post="post"
+                                v-bind:reset="audioPlayerInUse"
+                                @player-used="resetAudioPlayers"
+                            >
+                            </user-post>
                         </template>               
                     </section>
                     <div class="post-block-navigation" v-bind:class="{'small-stack-nav': totalPages > 4}">
@@ -70,7 +54,7 @@
                             <li>
                                 <button 
                                     type="button" 
-                                    class="nav-button" 
+                                    class="nav-button"
                                     @click="() => currentPage = previousPage(currentPage)" 
                                     :disabled="currentPage === 0"
                                 >
@@ -146,7 +130,8 @@
         </footer>
     </div>
 
-    <script src="/js/vue.js"></script>
+    <!-- <script src="/js/vue.js"></script> -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="/js/load.js" type="module"></script>
 </body>
 </html>
