@@ -21,84 +21,86 @@
         <main class="main">
             <div class="container">
                 <h1 class="page-headline">r/Data Subreddit Reimagined For Protegrity</h1>
-                <menu v-if:="posts.length" class="post-type-filters" aria-label="Filter posts by type">
-                    <li v-for:="type in postTypeOptions">
-                        <button 
-                            type="button" 
-                            class="post-type-filter" 
-                            v-bind:class="{'active-filter': type === postType}" 
-                            @click="changePostType(type, postTypeOptions, postType)"
-                        >
-                            {{ type }}
-                        </button>
-                    </li>
-                </menu>
-                <div v-if:="posts.length" class="posts-list" aria-roledescription="carousel">
-                    <section 
-                        class="posts-block" 
-                        v-for:="(block, index) in posts" 
-                        v-bind:data-page-block="index"
-                    >        
-                        <template v-for:="post in block" :key="post.id">
-                            <user-post 
-                                v-show:="index === currentPage"
-                                v-bind:post="post"
-                                v-bind:reset="audioPlayerInUse"
-                                @player-used="resetAudioPlayers"
+                <template v-if:="!loading">
+                    <menu v-if:="posts.length" class="post-type-filters" aria-label="Filter posts by type">
+                        <li v-for:="type in postTypeOptions">
+                            <button 
+                                type="button" 
+                                class="post-type-filter" 
+                                v-bind:class="{'active-filter': type === postType}" 
+                                @click="changePostType(type, postTypeOptions, postType)"
                             >
-                            </user-post>
-                        </template>               
-                    </section>
-                    <div class="post-block-navigation" v-bind:class="{'small-stack-nav': totalPages > 4}">
-                        <menu aria-label="Navigate in linear order between pages of posts">
-                            <li>
-                                <button 
-                                    type="button" 
-                                    class="nav-button"
-                                    @click="() => currentPage = previousPage(currentPage)" 
-                                    :disabled="currentPage === 0"
+                                {{ type }}
+                            </button>
+                        </li>
+                    </menu>
+                    <div v-if:="posts.length" class="posts-list" aria-roledescription="carousel">
+                        <section 
+                            class="posts-block" 
+                            v-for:="(block, index) in posts" 
+                            v-bind:data-page-block="index"
+                        >        
+                            <template v-for:="post in block" :key="post.id">
+                                <user-post 
+                                    v-show:="index === currentPage"
+                                    v-bind:post="post"
+                                    v-bind:reset="audioPlayerInUse"
+                                    @player-used="resetAudioPlayers"
                                 >
-                                    <span class="visibility-hidden">Previous group of posts</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
-                                        <path d="M32 24H18M22 30L16 24L22 18M6 24C6 14.0589 14.0589 6 24 6C33.9412 6 42 14.0589 42 24C42 33.9412 33.9412 42 24 42C14.0589 42 6 33.9412 6 24Z" stroke="#373737" stroke-width="2" stroke-linecap="square"></path>
-                                    </svg>
-                                </button>
-                            </li>
-                            <li>
-                                <button 
-                                    type="button" 
-                                    class="nav-button" 
-                                    @click="() => currentPage = nextPage(currentPage, totalPages)" 
-                                    :disabled="currentPage === totalPages - 1"
-                                >
-                                    <span class="visibility-hidden">Next group of posts</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
-                                        <path d="M16 24H30M26 30L32 24L26 18M42 24C42 14.0589 33.9411 6 24 6C14.0588 6 6 14.0589 6 24C6 33.9412 14.0588 42 24 42C33.9411 42 42 33.9412 42 24Z" stroke="#373737" stroke-width="2" stroke-linecap="square"></path>
-                                    </svg>
-                                </button>
-                            </li>
-                        </menu>
-                        <menu aria-label="Navigate to a specific page of posts" class="page-markers">
-                            <li class="visibility-hidden">Currently on page {{ currentPage + 1 }}</li>
-                            <template v-for:="(page, index) in posts">
+                                </user-post>
+                            </template>               
+                        </section>
+                        <div class="post-block-navigation" v-bind:class="{'small-stack-nav': totalPages > 4}">
+                            <menu aria-label="Navigate in linear order between pages of posts">
                                 <li>
                                     <button 
-                                        type="button"
-                                        class="page-marker"
-                                        v-bind:class="{'active-page': index === currentPage}"
-                                        @click="() => currentPage = goToPage(index, currentPage, totalPages)"
-                                    >   
-                                        {{ index + 1 }}
+                                        type="button" 
+                                        class="nav-button"
+                                        @click="() => currentPage = previousPage(currentPage)" 
+                                        :disabled="currentPage === 0"
+                                    >
+                                        <span class="visibility-hidden">Previous group of posts</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                            <path d="M32 24H18M22 30L16 24L22 18M6 24C6 14.0589 14.0589 6 24 6C33.9412 6 42 14.0589 42 24C42 33.9412 33.9412 42 24 42C14.0589 42 6 33.9412 6 24Z" stroke="#373737" stroke-width="2" stroke-linecap="square"></path>
+                                        </svg>
                                     </button>
                                 </li>
-                            </template>
-                        </menu>
+                                <li>
+                                    <button 
+                                        type="button" 
+                                        class="nav-button" 
+                                        @click="() => currentPage = nextPage(currentPage, totalPages)" 
+                                        :disabled="currentPage === totalPages - 1"
+                                    >
+                                        <span class="visibility-hidden">Next group of posts</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                            <path d="M16 24H30M26 30L32 24L26 18M42 24C42 14.0589 33.9411 6 24 6C14.0588 6 6 14.0589 6 24C6 33.9412 14.0588 42 24 42C33.9411 42 42 33.9412 42 24Z" stroke="#373737" stroke-width="2" stroke-linecap="square"></path>
+                                        </svg>
+                                    </button>
+                                </li>
+                            </menu>
+                            <menu aria-label="Navigate to a specific page of posts" class="page-markers">
+                                <li class="visibility-hidden">Currently on page {{ currentPage + 1 }}</li>
+                                <template v-for:="(page, index) in posts">
+                                    <li>
+                                        <button 
+                                            type="button"
+                                            class="page-marker"
+                                            v-bind:class="{'active-page': index === currentPage}"
+                                            @click="() => currentPage = goToPage(index, currentPage, totalPages)"
+                                        >   
+                                            {{ index + 1 }}
+                                        </button>
+                                    </li>
+                                </template>
+                            </menu>
+                        </div>
                     </div>
-                </div>
-                <div v-if:="!loading && !posts.length" class="no-posts">
-                    <h2 class="no-post-headline">Oops, There is a problem.</h2>
-                    <p class="no-post-message">No posts available. Please try again later.</p>
-                </div>
+                    <div v-if:="!posts.length" class="no-posts">
+                        <h2 class="no-post-headline">Oops, There is a problem.</h2>
+                        <p class="no-post-message">No posts available. Please try again later.</p>
+                    </div>
+                </template>
             </div>
             <div v-if:="loading" class="spinner-center">
                 <div class="spinner" role="status">
