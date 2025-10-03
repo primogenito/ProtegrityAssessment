@@ -14,9 +14,11 @@ export default {
     setup(props, { emit }) {
         const playingAudio = ref(false);
         const isPaused = ref(false);
-
+        
         const readText = text => {
-            speak(text, isPaused.value);
+            speak({text, isPaused: isPaused.value, endCallback: () => {
+                playingAudio.value = false;
+            }});
             emit("playerUsed", props.post.id);
 
             playingAudio.value = true;

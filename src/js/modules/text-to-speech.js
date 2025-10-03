@@ -1,5 +1,4 @@
 const synthesizer = globalThis.speechSynthesis;
-const utterance = new SpeechSynthesisUtterance();
 
 export function syntheticVoice() {
     const voices = synthesizer.getVoices();
@@ -20,12 +19,19 @@ export function syntheticVoice() {
  * @param {string} text - String of text to speak
  * @returns {void}
  */
-export function speak(text, isPaused = false) { 
+export function speak({text, endCallback, isPaused = false}) { 
     const voice = syntheticVoice();
+    const utterance = new SpeechSynthesisUtterance(text);
 
-    utterance.text = text;
     utterance.rate = 1;
     utterance.pitch = 1.2;
+    utterance.onerror = event => console.error(`
+        There was an error when reading ${event.name} at time ${event.elapsedTime} seconds, error: ${event.error} 
+    `);
+    
+    if (endCallback) {
+        utterance.onend = endCallback;
+    }
 
     if (voice) {
         utterance.voice = voice;
